@@ -5,6 +5,7 @@ There are certain applications that leverage IPFS and are built on blockchain. T
 
 Hence, there is a need for a standardized bridge protocol that connects IPFS and Polkadot so that people can build DAO like Airbnb, Uber, etc.
 
+# DAirbnb: A case study
 I am taking a case study of Airbnb(Listing places). User is using a decentralized application DAirbnb(say) and they want to get listings of the hopuses in the region of their choice.
 
 The use cases are as follows:
