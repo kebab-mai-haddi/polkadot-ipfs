@@ -9,13 +9,19 @@ Hence, there is a need for a standardized bridge protocol that connects IPFS and
 I am taking a case study of Airbnb(Listing places). User is using a decentralized application DAirbnb(say) and they want to get listings of the hopuses in the region of their choice.
 
 The use cases are as follows:
+
 i) Enter region
+
 ii) On blockchain, the app gets all the places for that particular region from a hash table H(say).
+
 iii) Show the JSON response to the user
+
 iv) User selects a particular place(flat, villa, etc) and gets to see all the details of that place such as: owner, address, price, all images of that place.
 
 Now, all the images are fetched from IPFS. And this is how the parachain would work:
+
 i) use the hash of all the images and get all of them from IPFS,
+
 ii) embed the web link to display the image to the user.
 
 
