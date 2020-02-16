@@ -1,7 +1,17 @@
-# Why do we need to bridge polkadot and ipfs?
-IPFS is a distributed file system storage. Polkadot or any blockchain for that matter needs IPFS because you should not store large files on the blockchain due to cost. Click [here](https://itnext.io/build-a-simple-ethereum-interplanetary-file-system-ipfs-react-js-dapp-23ff4914ce4e) to see how much does it cost to store huge files on Ethereum.
+# What is Blockchain?
+The best read that I have found to understand the full implications of blockchain technology in simple words with no jargons: [A Blockchain Explanation That Your Parents Can Understand](https://taylorpearson.me/blockchain-for-dummies/)
 
-There are certain applications that leverage IPFS and are built on blockchain. Two such applications are [Origin Protocol](https://www.originprotocol.com/en) and [Joystream](https://www.joystream.org/).
+# What is Polkadot?
+[This](https://medium.com/posbakerz/what-is-polkadot-a-quick-overview-54ef264f15b9) overview is a must-read to understand what Polkadot is.
+
+# What is IPFS?
+>A peer-to-peer hypermedia protocol designed to make the web faster, safer, and more open.
+In one simple line, IPFS is a decentralized, distributed data storage platform. If interested, you can read in depth about IPFS [here](https://hackernoon.com/understanding-ipfs-in-depth-1-5-a-beginner-to-advanced-guide-e937675a8c8a).
+
+# Why do we need to bridge Polkadot and IPFS?
+Let's consider a use case in your decentralized software that requires storing files(audio, video, etc.). Storing large files on any blockchain will cost you a lot of time and money. Read [this] (https://itnext.io/build-a-simple-ethereum-interplanetary-file-system-ipfs-react-js-dapp-23ff4914ce4e) to understand how much does it cost to store a normal file on Ethereum blockchain. And if you are storing your files on services like S3, GCS, then you need to trust these centralized sotrage systems. So, we need some storage mechanism just like Blockchain - decentralized, distributed, no need to trust anyone and anything but Maths.
+
+IPFS is a distributed file system storage. Polkadot or any blockchain for that matter needs IPFS because you should not store large files on the blockchain due to cost. There are certain applications that leverage IPFS and are built on blockchain. Two such applications are [Origin Protocol](https://www.originprotocol.com/en) and [Joystream](https://www.joystream.org/).
 
 Hence, there is a need for a standardized bridge protocol that connects IPFS and Polkadot so that people can build DAO like Airbnb, Uber, etc.
 
