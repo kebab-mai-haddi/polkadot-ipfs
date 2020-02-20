@@ -35,7 +35,10 @@ Polkadot provides me with the blockchain infra, I don't have to create a blockch
 # IPFS’ protocol and guarantees. Blockchains are tamper-evident, meaning that no one can change a blog without others noticing. Is there a similar guarantee provided by IPFS? Can your integration break trust somehow? Can you show that it doesn’t? Do you rely on Polkadot guarantees for that? If so, how?
 
 Yes, IPFS is a content based address storage, so if you change the data, the hash will be changed and the key to retrieve the data won't return the updated value. The integration that I am planning will not break the trust. Below roadmap will demonstrate how it doesn't break the trust. Yes, Polkadot is a network of multiple blockchains and so, I rely on Polkadot to be tamper evident.
-# 
+
+# Is the bridge you propose something like [Chainlink](https://chain.link/)?
+The intention is somewhat similar. But Chainlink doesn't bridge blockchain to IPFS, it bridges smart contracts to access data.
+
 # Steps to bridge Polkadot and IPFS (Roadmap)
 1. Set the state variables.
 2. Capture the User’s file.
