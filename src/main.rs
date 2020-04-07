@@ -19,7 +19,7 @@ fn main() {
     let mut api = Api::new(format!("ws://{}", url));
     let signer = AccountKeyring::Alice.pair();
     api.signer = Some(signer);
-    let mut file_hash = "0000000000000000000000000000000000000000000000000000000000000002"
+    let mut file_hash = "0000000000000000000000000000000000000000000000000000000000000004"
         .to_string()
         .into_bytes();
     file_hash = hex::decode(file_hash).unwrap();
