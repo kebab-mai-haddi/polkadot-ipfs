@@ -9,6 +9,45 @@ edition = "2018"
 [dependencies]
 blake2-rfc = "0.2.18"
 hex-literal = "0.2.1"
+primitive-types = { version = "0.6", default-features = false, features = ["codec"] }
+hex             = "0.4"
+env_logger      = "0.7"
 
 [dependencies.substrate-api-client]
 git = "https://github.com/scs/substrate-api-client"
+
+[dependencies.clap] 
+version = "2.33"
+features = ["yaml"] 
+
+[dependencies.codec]
+package = "parity-scale-codec"
+features = ["derive"]
+version = "1.0.0"
+default-features = false
+
+
+[dependencies.sp-core]
+git = "https://github.com/paritytech/substrate"
+rev = "00a400f82539e2f78e8ddbcd98aea512c87c5f3c"
+package = "sp-core"
+default-features = false
+features = ["full_crypto"]
+
+
+[dependencies.node_primitives]
+git = "https://github.com/paritytech/substrate"
+rev = "00a400f82539e2f78e8ddbcd98aea512c87c5f3c"
+package = "node-primitives"
+default-features=false
+
+[dependencies.keyring]
+git = "https://github.com/paritytech/substrate"
+rev = "00a400f82539e2f78e8ddbcd98aea512c87c5f3c"
+package = "sp-keyring"
+
+[dependencies.sp-runtime]
+git = "https://github.com/paritytech/substrate"
+rev = "00a400f82539e2f78e8ddbcd98aea512c87c5f3c"
+package = "sp-runtime"
+default-features=false
