@@ -1,5 +1,5 @@
 mod utils;
 
 fn main() {
-    utils::get_account_id_for_file_hash();
+    utils::determine_read_or_write_operation();
 }
