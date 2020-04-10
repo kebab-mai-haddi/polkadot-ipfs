@@ -22,3 +22,8 @@ args:
       long: file-hash
       help: Input file hash returned by IPFS at the time of uploading.
       takes_value: true
+  - mode:
+      short: m
+      long: mode
+      help: takes values r or w. It is the mode of operation, whether read from polkadot or write to polkadot
+      takes_value: true
