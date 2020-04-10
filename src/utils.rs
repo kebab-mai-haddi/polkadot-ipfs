@@ -1,6 +1,7 @@
 use clap::{load_yaml, App};
 use hex;
 use keyring::AccountKeyring;
+use sp_core::blake2_256;
 use sp_core::crypto::Ss58Codec;
 use sp_runtime::AccountId32;
 use std;
@@ -17,14 +18,16 @@ fn from_slice(vector: Vec<u8>) -> [u8; 32] {
 pub fn get_account_id_for_file_hash() {
     env_logger::init();
     let url = get_url();
-    let _file_hash = get_file_hash();
     let mut api = Api::new(format!("ws://{}", url));
     let signer = AccountKeyring::Alice.pair();
     api.signer = Some(signer);
-    let mut file_hash = _file_hash.to_string().into_bytes();
-    file_hash = hex::decode(file_hash).unwrap();
+
+    let _file_hash = get_file_hash().to_string();
+    let _file_hash_as_bytes = _file_hash.as_bytes();
+    let _blake_hashed_file_hash = Box::new(blake2_256(_file_hash_as_bytes)).to_vec();
+    println!("Blake hash is: {:?}", hex::encode(&_blake_hashed_file_hash));
     let mut result_str = api
-        .get_storage("KittyStorage", "Value", Some(file_hash))
+        .get_storage("KittyStorage", "Value", Some(_blake_hashed_file_hash))
         .unwrap();
     result_str.pop();
     println!("Result str is: {:?}", &result_str);
@@ -38,10 +41,7 @@ pub fn get_account_id_for_file_hash() {
 fn get_file_hash() -> String {
     let yml = load_yaml!("../configuration.yaml");
     let matches = App::from_yaml(yml).get_matches();
-    let file_hash = matches
-        .value_of("file-hash")
-        .unwrap_or("0000000000000000000000000000000000000000000000000000000000000004");
-    println!("IPFS Hash is: {:?}", file_hash);
+    let file_hash = matches.value_of("file-hash").unwrap();
     file_hash.to_string()
 }
 
