@@ -1,0 +1,24 @@
+name: "pipfs"
+version: "1.0.0"
+about: Getting file hash
+authors: "Aviral Srivastava"
+
+# AppSettings can be defined as a list and are **not** ascii case sensitive
+settings:
+  - ColoredHelp
+
+args:
+  - node-server:
+      long: ns
+      help: Set the node server IP address
+      takes_value: true
+  - node-port:
+      short: p
+      long: node-port
+      help: Set the websocket port to listen for substrate events
+      takes_value: true
+  - file-hash:
+      short: f
+      long: file-hash
+      help: Input file hash returned by IPFS at the time of uploading.
+      takes_value: true
