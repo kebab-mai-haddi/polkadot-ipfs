@@ -6,7 +6,9 @@ use sp_core::crypto::Pair;
 use sp_core::crypto::Ss58Codec;
 use sp_runtime::AccountId32;
 use std;
-use std::{str, string};
+use std::io::{self, Write};
+use std::process::Command;
+use std::str;
 use substrate_api_client::{compose_extrinsic, utils::hexstr_to_hash, Api};
 
 fn from_slice(vector: Vec<u8>) -> [u8; 32] {
@@ -92,10 +94,48 @@ pub fn determine_read_or_write_operation() {
     let yml = load_yaml!("../configuration.yaml");
     let matches = App::from_yaml(yml).get_matches();
     let mode_of_operation = matches.value_of("mode").unwrap_or("r");
+    if mode_of_operation == "u" {
+        upload_the_file();
+    }
     if mode_of_operation == "w" {
         write_to_polkadot();
     }
     if mode_of_operation == "r" {
         get_account_id_for_file_hash();
     }
+    if mode_of_operation == "d" {
+        download_the_file();
+    }
+}
+
+fn download_the_file() {
+    println!("Please enter the checksum of the file: ");
+    let mut checksum = String::new();
+    io::stdin()
+        .read_line(&mut checksum)
+        .expect("Failed to read checksum.");
+    println!("The checksum entered is: {}", checksum);
+    let ipfs_output = Command::new("ipfs")
+        .arg("get")
+        .arg(checksum.trim_end())
+        .output()
+        .expect("ipfs command failed to download the file.");
+    println!("The file is downloaded now!");
+    io::stdout().write_all(&ipfs_output.stdout).unwrap();
+}
+
+fn upload_the_file() {
+    println!("Please enter the file path to upload on IPFS: ");
+    let mut file_path = String::new();
+    io::stdin()
+        .read_line(&mut file_path)
+        .expect("Failed to read file path.");
+    println!("The file path entered is: {}", file_path);
+    let ipfs_output = Command::new("ipfs")
+        .arg("add")
+        .arg(file_path.trim_end())
+        .output()
+        .expect("ipfs command failed to start");
+    println!("Hash digest is: ");
+    io::stdout().write_all(&ipfs_output.stdout).unwrap();
 }
