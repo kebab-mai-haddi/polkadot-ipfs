@@ -18,12 +18,13 @@ args:
       help: Set the websocket port to listen for substrate events
       takes_value: true
   - file-hash:
-      short: f
+      short: fh
       long: file-hash
       help: Input file hash returned by IPFS at the time of uploading.
       takes_value: true
   - mode:
       short: m
       long: mode
-      help: takes values r or w. It is the mode of operation, whether read from polkadot or write to polkadot
+      help: takes values r or w or u or d. It is the mode of operation, whether read from polkadot or write to polkadot
       takes_value: true
+# ./target/debug pipfs -fp /users/avi 
