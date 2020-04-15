@@ -11,7 +11,7 @@ Click [here](https://www.rust-lang.org/tools/install) to install Rust.
 ## Setup a running substrate node
 If this is the first time you are going to build a Substrate node, click [here](https://substrate.dev/docs/en/overview/getting-started/) and follow the instructions. We will be modifying the code later on but it is important that you are familiar with the basics of Substrate - knowing how to run the frontend, backend, tests, etc.
 
-Once done with the above _Getting Started_ instructions, go to the base directory of the project and checkut to a particular commit. This is an important step. We use `substrate-api-client` which is compatible with a particular commit of the [repo](github.com/paritytech/substrate).
+Once done with the above _Getting Started_ instructions, go to the base directory of the project and checkut to a particular commit. This is an important step. We use `substrate-api-client` which is compatible only with a particular commit of the [repo](github.com/paritytech/substrate). However, upon the v2 release of Substrate, we will be compatible with the latest Substrate code. Substrate-API-Client is a trustworthy repository as it is funded by the dev grants of Paritytech.
 ### Clone Substrate repo
 Clone the repo if you haven't already.
 
