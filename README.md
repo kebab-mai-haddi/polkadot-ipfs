@@ -1,52 +1,113 @@
-# What is Blockchain?
-The best read that I have found to understand the full implications of blockchain technology in simple words with no jargons: [A Blockchain Explanation That Your Parents Can Understand](https://taylorpearson.me/blockchain-for-dummies/)
+# What is PIPFS?
+A cli-tool for Substrate users to store their data on IPFS and record their ownership and/or access to data on the Substrate chain - providing them a means of storing data in a distributed, decentralized manner on a tamper-proof and distributed system ( aka Blockchain ).
 
-# Why storing data in blockchain is expensive?
-Why is storing data on the blockchain so expensive? It is because the data has to be stored by every full node on the blockchain network. When storing data on the blockchain, we do pay the base price for the transaction itself plus an amount per byte we want to store. [Source](https://www.blockchainguide.biz/storing-data-on-blockchain/)
+For reading the background, click [here](Background.md)
 
-# What is Polkadot?
-[This](https://medium.com/posbakerz/what-is-polkadot-a-quick-overview-54ef264f15b9) overview is a must-read to understand what Polkadot is.
+# Instructions
+## Install IPFS
+Make sure you have a running IPFS cli. Click [here](https://ipfs.io/#install) to install IPFS.
+## Install Rust
+Click [here](https://www.rust-lang.org/tools/install) to install Rust.
+## Setup a running substrate node
+If this is the first time you are going to build a Substrate node, click [here](https://substrate.dev/docs/en/overview/getting-started/) and follow the instructions. We will be modifying the code later on but it is important that you are familiar with the basics of Substrate - knowing how to run the frontend, backend, tests, etc.
 
-# Why do you need Polkadot to exchange data between two different blockchains? 
-In Polkadot, there is no fees to exchange information between two blockchains. For eg, consider two scenarios A and B.
-A: polkadot_btc and polkadot_eth are the two parachains( blockchains on Polkadot network ) and they can interact with each other for free _i.e._ there will be no transaction fees.
-B: btc and eth are two entirely different blockchains and they need to interact, we would have to pay the transaction fees on both ends.
+Once done with the above _Getting Started_ instructions, go to the base directory of the project and checkut to a particular commit. This is an important step. We use `substrate-api-client` which is compatible only with a particular commit of the [repo](github.com/paritytech/substrate). However, upon the v2 release of Substrate, we will be compatible with the latest Substrate code. Substrate-API-Client is a trustworthy repository as it is funded by the dev grants of Paritytech.
+### Clone Substrate repo
+Clone the repo if you haven't already.
 
-# What could go wrong if there is no Polkadot in between?
-As explained in the above question, nothing goes wrong but you have to take care of the security, transaction fees, etc.
+`git clone https://github.com/paritytech/substrate`
 
-# What is IPFS?
->A peer-to-peer hypermedia protocol designed to make the web faster, safer, and more open.
+`git checkout 00a400f82539e2f78e8ddbcd98aea512c87c5f3c`
 
-In one simple line, IPFS is a decentralized, distributed data storage platform. 
+### Building our Storage Map on Substrate
+Following are some git diffs that should be applied to our Substrate node:
 
-If interested, you can read in depth about IPFS [here](https://hackernoon.com/understanding-ipfs-in-depth-1-5-a-beginner-to-advanced-guide-e937675a8c8a).
+1. 
+```
+diff --git a/bin/node/runtime/src/lib.rs b/bin/node/runtime/src/lib.rs
+index 6c5b75482..8dee517be 100644
+--- a/bin/node/runtime/src/lib.rs
++++ b/bin/node/runtime/src/lib.rs
+@@ -60,6 +60,8 @@ pub use pallet_contracts::Gas;
+ pub use frame_support::StorageValue;
+ pub use pallet_staking::StakerStatus;
 
-# Why do we need to bridge Polkadot and IPFS?
-Let's consider a use case in your decentralized software that requires storing files(audio, video, etc.). Storing large files on any blockchain will cost you a lot of time and money. Read [this](https://itnext.io/build-a-simple-ethereum-interplanetary-file-system-ipfs-react-js-dapp-23ff4914ce4e) to understand how much does it cost to store a normal file on Ethereum blockchain. And if you are storing your files on services like S3, GCS, then you need to trust these centralized sotrage systems. So, we need some storage mechanism just like Blockchain - decentralized, distributed, no need to trust anyone and anything but Maths.
++mod substratekitties;
++
+ /// Implementations of some helper traits passed into runtime modules as associated types.
+ pub mod impls;
+ use impls::{CurrencyToVoteHandler, Author, LinearWeightToFee, TargetedFeeAdjustment};
+@@ -592,7 +594,7 @@ impl pallet_vesting::Trait for Runtime {
+        type Currency = Balances;
+        type BlockNumberToBalance = ConvertInto;
+ }
+-
++impl substratekitties::Trait for Runtime {}
+ construct_runtime!(
+        pub enum Runtime where
+                Block = Block,
+@@ -627,6 +629,7 @@ construct_runtime!(
+                Society: pallet_society::{Module, Call, Storage, Event<T>, Config<T>},
+                Recovery: pallet_recovery::{Module, Call, Storage, Event<T>},
+                Vesting: pallet_vesting::{Module, Call, Storage, Event<T>, Config<T>},
++               Substratekitties: substratekitties::{Module, Call, Storage},
+        }
+ );
+ ```
 
-IPFS is a distributed file system storage. Polkadot or any blockchain for that matter needs IPFS because you should not store large files on the blockchain due to cost. There are certain applications that leverage IPFS and are built on blockchain. Two such applications are [Origin Protocol](https://www.originprotocol.com/en) and [Joystream](https://www.joystream.org/).
+ 2. We have to add a file to our runtime: `bin/node/runtime/src/substratekitties.rs`
+```
+➜  substrate git:(00a400f82) ✗ cat bin/node/runtime/src/substratekitties.rs
+use frame_support::{decl_module, decl_storage, dispatch::result::Result, ensure, StorageMap};
+use frame_system::ensure_signed;
+use sp_runtime::DispatchError;
 
-Hence, there is a need for a standardized bridge protocol that connects IPFS and Polkadot so that people can build DAO like Airbnb, Uber, etc.
+// pub trait Trait: balances::Trait {}
+pub trait Trait: pallet_balances::Trait {}
 
-# What’s the abstraction Polkadot/Substrate gives you to make the integration?
-Polkadot provides me with the blockchain infra, I don't have to create a blockchain myself.
+decl_storage! {
+    trait Store for Module<T: Trait> as KittyStorage {
+        // Value: map T::Hash => Option<T::AccountId>;
+        // TODO: check whether this is the appropriate datatype(hash).
+        Value: map hasher(blake2_256) T::Hash => Option<T::AccountId>;
+        // Balances: map hasher(blake2_256) (T::AssetId, T::AccountId) => T::Balance;
+    }
+}
 
-# IPFS’ protocol and guarantees. Blockchains are tamper-evident, meaning that no one can change a blog without others noticing. Is there a similar guarantee provided by IPFS? Can your integration break trust somehow? Can you show that it doesn’t? Do you rely on Polkadot guarantees for that? If so, how?
+decl_module! {
+    pub struct Module<T: Trait> for enum Call where origin: T::Origin {
+        fn set_value(origin, value: T::Hash) -> Result<(), DispatchError> {
+            let sender = ensure_signed(origin)?;
+            ensure!(!<Value<T>>::contains_key(value), "key already exists");
+            <Value<T>>::insert(value, sender);
+            Ok(())
+        }
+    }
+}
+```
 
-Yes, IPFS is a content based address storage, so if you change the data, the hash will be changed and the key to retrieve the data won't return the updated value. The integration that I am planning will not break the trust. Below roadmap will demonstrate how it doesn't break the trust. Yes, Polkadot is a network of multiple blockchains and so, I rely on Polkadot to be tamper evident.
+### Build the code
+`cargo build --release`
 
-# Is the bridge you propose something like [Chainlink](https://chain.link/)?
-The intention is somewhat similar. But Chainlink doesn't bridge blockchain to IPFS, it bridges smart contracts to access data.
+`cargo test --all`
 
-# Steps to bridge Polkadot and IPFS (Roadmap)
-1. Set the state variables.
-2. Capture the User’s file.
-3. Convert the file to a buffer.
-4. Send the buffered file to IPFS
-5. IPFS returns a hash.
-6. Get the User sign into Polkadot network
-7. Send the IPFS for storage on Polkadot.
-8. User will confirm the transaction to Polkadot.
-9. Our app will return the transaction number.
-10. The transaction hash number can be used to generate a transaction receipt with          information such as the block number.
+`./target/release/substrate --dev`
+
+See if the node is running, click [here](https://polkadot.js.org/apps/#/accounts). You have to get connected to the local node from the configurations which are described well enough in the aforementioned _Getting Started_ tutorial.
+
+## Run PIPFS
+### Clone and build the repo
+```
+git clone https://github.com/kebab-mai-haddi/polkadot-ipfs.git 
+cargo build
+```
+### Run the cli tool
+```
+./target/debug/pipfs --help
+```
+### Few examples include
+```
+./target/debug/pipfs -m w -f QmeB8xL2oFYxouVgsGmyEW78EqP1Y2MQL69hdFVLPqaW9T
+```
+
+Please provide your feedback on [my email](mailto:hi@aviralsrivastava.com). For future work, click [here](Future_Work.md)
