@@ -10,12 +10,12 @@ settings:
 args:
   - node-server:
       long: ns
-      help: Set the node server IP address
+      help: Set the Substrate's node server IP address
       takes_value: true
   - node-port:
       short: p
       long: node-port
-      help: Set the websocket port to listen for substrate events
+      help: Set the websocket port to listen for substrate events on Substrate server.
       takes_value: true
   - file-hash:
       short: fh
