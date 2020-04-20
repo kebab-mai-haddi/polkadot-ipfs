@@ -106,8 +106,37 @@ cargo build
 ./target/debug/pipfs --help
 ```
 ### Few examples include
+#### Upload a file to IPFS
 ```
-./target/debug/pipfs -m w -f QmeB8xL2oFYxouVgsGmyEW78EqP1Y2MQL69hdFVLPqaW9T
+./target/debug/pipfs -m u
 ```
+>Please enter the file path to upload on IPFS:
+```
+<file_path>
+```
+#### Record the ownership on Substrate Chain
+After uploading the file to IPFS, PIPFS return the content identifier for your file stored on IPFS. Use that hash to record file ownership on the Substrate chain by running the command
+```
+./target/debug/pipfs -m w -f <file_hash>
+```
+You will see the following message if all goes successful:
+>[+] Transaction got finalized. Hash: 0xebdf6d231a5fc47367382cb3368ac4479322559348db5051e4f0a8311075ff7e
+
+#### Determine the ownership for a given file
+```
+./target/debug/pipfs -m r -f <file_hash>
+```
+> Account is: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+
+#### Download the file from IPFS
+```
+./target/debug/pipfs -m d
+```
+Enter the checksum when the following prompt appears:
+> Please enter the checksum of the file:
+
+If all goes well, you will see the message:
+> The file is downloaded now!
+> Saving file(s) to QmNYERzV2LfD2kkfahtfv44ocHzEFK1sLBaE7zdcYT2GAZ
 
 Please provide your feedback on [my email](mailto:hi@aviralsrivastava.com). For future work, click [here](Future_Work.md)
