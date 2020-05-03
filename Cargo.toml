@@ -15,6 +15,7 @@ env_logger      = "0.7"
 
 [dependencies.substrate-api-client]
 git = "https://github.com/scs/substrate-api-client"
+rev = "822b0fd7fe4df5dabdb3c60c75d12d36cccba2f2"
 
 [dependencies.clap] 
 version = "2.33"
