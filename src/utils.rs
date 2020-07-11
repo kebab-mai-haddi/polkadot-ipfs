@@ -11,6 +11,7 @@ use std::process::Command;
 use std::str;
 use substrate_api_client::{compose_extrinsic, utils::hexstr_to_hash, Api};
 
+/// Slices a vector into array
 fn from_slice(vector: Vec<u8>) -> [u8; 32] {
     let mut array = [0; 32];
     let bytes = &vector[..array.len()]; // panics if not enough data
@@ -18,6 +19,7 @@ fn from_slice(vector: Vec<u8>) -> [u8; 32] {
     array
 }
 
+/// Gets file hash from the command line
 fn get_file_hash() -> String {
     let yml = load_yaml!("../configuration.yaml");
     let matches = App::from_yaml(yml).get_matches();
@@ -25,6 +27,7 @@ fn get_file_hash() -> String {
     file_hash.to_string()
 }
 
+/// Gets URL of the running substrate node from the command line
 fn get_url() -> String {
     let yml = load_yaml!("../configuration.yaml");
     let matches = App::from_yaml(yml).get_matches();
@@ -34,6 +37,7 @@ fn get_url() -> String {
     url
 }
 
+/// fetch account id from substrate chain
 fn get_account_id_for_file_hash() {
     env_logger::init();
     let url = get_url();
